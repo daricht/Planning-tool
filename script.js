@@ -55,11 +55,20 @@ document.addEventListener('DOMContentLoaded', () => {
             listItem.textContent = `${task.text} (${task.priority})`;
             listItem.classList.add(`priority-${task.priority}`);
 
-            const changePriorityButton = document.createElement('button');
-            changePriorityButton.textContent = 'Change Priority';
-            changePriorityButton.addEventListener('click', () => {
-                const newPriority = prompt('Enter new priority (low, medium, high):', task.priority);
-                if (newPriority && priorityOrder[newPriority] !== undefined) {
+            const increasePriorityButton = document.createElement('button');
+            increasePriorityButton.textContent = 'Increase Priority';
+            increasePriorityButton.addEventListener('click', () => {
+                const newPriority = getNextPriority(task.priority, 'increase');
+                if (newPriority) {
+                    changePriority(index, newPriority);
+                }
+            });
+
+            const decreasePriorityButton = document.createElement('button');
+            decreasePriorityButton.textContent = 'Decrease Priority';
+            decreasePriorityButton.addEventListener('click', () => {
+                const newPriority = getNextPriority(task.priority, 'decrease');
+                if (newPriority) {
                     changePriority(index, newPriority);
                 }
             });
@@ -68,10 +77,22 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', () => deleteTask(index));
 
-            listItem.appendChild(changePriorityButton);
+            listItem.appendChild(increasePriorityButton);
+            listItem.appendChild(decreasePriorityButton);
             listItem.appendChild(deleteButton);
             taskList.appendChild(listItem);
         });
+    };
+
+    const getNextPriority = (currentPriority, action) => {
+        const priorities = ['high', 'medium', 'low'];
+        const currentIndex = priorities.indexOf(currentPriority);
+        if (action === 'increase' && currentIndex > 0) {
+            return priorities[currentIndex - 1];
+        } else if (action === 'decrease' && currentIndex < priorities.length - 1) {
+            return priorities[currentIndex + 1];
+        }
+        return null;
     };
 
     const loadTasks = () => {
