@@ -1,0 +1,60 @@
+#body {
+	font-family: Arial, sans-serif;
+}
+#app {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+}
+#taskInput {
+	width: calc(100% - 22px);
+	padding: 10px;
+	margin-bottom: 10px;
+}
+#addTaskButton {
+	padding: 10px 20px;
+}
+#taskList {
+    list-style-type: none;
+    padding: 0;
+}
+#taskList li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+#prioritySelect {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.priority-low {
+    color: green;
+}
+.priority-medium {
+    color: orange;
+}
+.priority-high {
+    color: red;
+}
+.task-buttons {
+    float: right;
+    margin-left: 10px;
+}
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between elements as needed */
+}
+
+.priority-button {
+    padding: 7px 7px; /* Add padding to make it look like a button */
+    border-radius: 7px; /* Rounded corners */
+    border: none;
+    cursor: pointer;
+    color: white; /* Text color */
+    font-size: 14px; /* Font size */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.priority-button:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */

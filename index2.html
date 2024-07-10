@@ -3,64 +3,18 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Task Planner</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<style>
-		/* Add your CSS here */
-		body {
-			font-family: Arial, sans-serif;
-		}
-		#app {
-			max-width: 600px;
-			margin: 0 auto;
-			padding: 20px;
-		}
-		#taskInput {
-			width: calc(100% - 22px);
-			padding: 10px;
-			margin-bottom: 10px;
-		}
-		#addTaskButton {
-			padding: 10px 20px;
-		}
-		#taskList {
-			list-style-type: none;
-			padding: 0;
-		}
-		#taskList li {
-			padding: 10px;
-			border-bottom: 1px solid #ccc;
-		}
-		#prioritySelect {
-			padding: 10px;
-			margin-bottom: 10px;
-		}
-		.priority-low {
-			color: green;
-		}
-		.priority-medium {
-			color: orange;
-		}
-		.priority-high {
-			color: red;
-		}
-        .task-buttons {
-            float: right;
-            margin-left: 10px;
-        }
-	</style>
+	<title>Task Manager</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div id="app">
-		<input type="text" id="taskInput" placeholder="Enter a task">
-		<select id="prioritySelect">
-			<option value="low">Low</option>
-			<option value="medium">Medium</option>
-			<option value="high">High</option>
-		</select>
-		<button id="addTaskButton">Add Task</button>
-		<ul id="taskList"></ul>
+	<div class="input-container">
+		<input type="text" id="taskInput" placeholder="Enter task">
+		<button id="highPriorityButton" class="priority-button" style="background-color: red;"></button>
+		<button id="mediumPriorityButton" class="priority-button" style="background-color: orange;"></button>
+		<button id="lowPriorityButton" class="priority-button" style="background-color: green;"></button>
 	</div>
-    <script src="script.js"></script>
+	<ul id="taskList"></ul>
+	<script src="script.js"></script>
 </body>
 </html>
