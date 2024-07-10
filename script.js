@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
             listItem.classList.add(`priority-${task.priority}`);
 
             const increasePriorityButton = document.createElement('button');
-            increasePriorityButton.textContent = 'Increase Priority';
+            increasePriorityButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            increasePriorityButton.classList.add('task-buttons');
             increasePriorityButton.addEventListener('click', () => {
                 const newPriority = getNextPriority(task.priority, 'increase');
                 if (newPriority) {
@@ -65,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const decreasePriorityButton = document.createElement('button');
-            decreasePriorityButton.textContent = 'Decrease Priority';
+            decreasePriorityButton.innerHTML = '<i class="fas fa-arrow-down"></i>';
+            decreasePriorityButton.classList.add('task-buttons');
             decreasePriorityButton.addEventListener('click', () => {
                 const newPriority = getNextPriority(task.priority, 'decrease');
                 if (newPriority) {
@@ -74,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.classList.add('task-buttons');
             deleteButton.addEventListener('click', () => deleteTask(index));
 
             listItem.appendChild(increasePriorityButton);
