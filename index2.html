@@ -51,7 +51,22 @@
 					listItem.textContent = taskText;
 					taskList.appendChild(listItem);
 					taskInput.value = ''; // Clear the input field
+					saveTasks();
 				}
+			};
+
+			const saveTasks = () => {
+				const tasks = Array.from(taskList.children).map(task => task.textContent);
+				localStorage.setItem('tasks', JSON.stringify(tasks));
+			};
+
+			const loadTasks = () => {
+				const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+				tasks.forEach(taskText => {
+					const listItem = document.createElement('li');
+					listItem.textContent = taskText;
+					taskList.appendChild(listItem);
+				});
 			};
 
 			addTaskButton.addEventListener('click', addTask);
@@ -61,6 +76,8 @@
 					addTask();
 				}
 			});
+
+			loadTasks(); // Load tasks when the page is loaded
 		});
 	</script>
 </body>
