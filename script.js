@@ -1,6 +1,6 @@
-document.getElementById('highPriorityButton').addEventListener('click', () => addTask('9'));
+document.getElementById('highPriorityButton').addEventListener('click', () => addTask('1'));
 document.getElementById('mediumPriorityButton').addEventListener('click', () => addTask('5'));
-document.getElementById('lowPriorityButton').addEventListener('click', () => addTask('1'));
+document.getElementById('lowPriorityButton').addEventListener('click', () => addTask('9'));
 
 const taskInput = document.getElementById('taskInput');
 const dueDateInput = document.getElementById('dueDateInput');
@@ -46,7 +46,7 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
         increasePriorityButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
         increasePriorityButton.classList.add('task-buttons');
         increasePriorityButton.addEventListener('click', () => {
-            const newPriority = getNextPriority(task.priority, 'increase');
+            const newPriority = getNextPriority(task.priority, 'decrease');
             if (newPriority) {
                 changePriority(index, newPriority);
             }
@@ -56,7 +56,7 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
         decreasePriorityButton.innerHTML = '<i class="fas fa-arrow-down"></i>';
         decreasePriorityButton.classList.add('task-buttons');
         decreasePriorityButton.addEventListener('click', () => {
-            const newPriority = getNextPriority(task.priority, 'decrease');
+            const newPriority = getNextPriority(task.priority, 'increase');
             if (newPriority) {
                 changePriority(index, newPriority);
             }
@@ -76,12 +76,11 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
 };
 
 const getNextPriority = (currentPriority, action) => {
-    const priorities = ['10', '9', '8', '7', '6', '5', '4', '3', '2', '1'];
-    const currentIndex = priorities.indexOf(currentPriority);
-    if (action === 'increase' && currentIndex > 0) {
-        return priorities[currentIndex - 1];
-    } else if (action === 'decrease' && currentIndex < priorities.length - 1) {
-        return priorities[currentIndex + 1];
+    let numericPriority = parseInt(currentPriority, 10);
+    if (action === 'increase') {
+        return numericPriority < 10 ? numericPriority + 1 : numericPriority;
+    } else if (action === 'decrease') {
+        return numericPriority > 1 ? numericPriority - 1 : numericPriority;
     }
     return null;
 };
@@ -101,21 +100,8 @@ const deleteTask = (index) => {
     renderTasks(tasks);
 };
 
-const priorities = {
-    '10': 1, // highest
-    '9': 2,
-    '8': 3,
-    '7': 4,
-    '6': 5,
-    '5': 6,
-    '4': 7,
-    '3': 8,
-    '2': 9,
-    '1': 10, // lowest
-};
-
 const comparePriority = (a, b) => {
-    return priorities[a.priority] - priorities[b.priority];
+    return a.priority - b.priority;
 };
 
 const updateTaskPriorities = () => {
@@ -128,21 +114,18 @@ const updateTaskPriorities = () => {
             const timeDiff = dueDate - now;
             const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
             let newPriorityLevel = 10; // Default to lowest priority
-            if (daysDiff <= 3) newPriorityLevel = 1;
-            else if (daysDiff <= 6) newPriorityLevel = 2;
-            else if (daysDiff <= 9) newPriorityLevel = 3;
-            else if (daysDiff <= 12) newPriorityLevel = 4;
-            else if (daysDiff <= 15) newPriorityLevel = 5;
-            else if (daysDiff <= 18) newPriorityLevel = 6;
-            else if (daysDiff <= 21) newPriorityLevel = 7;
-            else if (daysDiff <= 24) newPriorityLevel = 8;
-            else if (daysDiff <= 27) newPriorityLevel = 9;
-            else newPriorityLevel = 10; // Default to lowest priority
-            // Convert to priority string
-            const newPriority = `${newPriorityLevel}`;
+            if (daysDiff <= 1) newPriorityLevel = 2;
+            else if (daysDiff <= 2) newPriorityLevel = 2;
+            else if (daysDiff <= 3) newPriorityLevel = 3;
+            else if (daysDiff <= 5) newPriorityLevel = 4;
+            else if (daysDiff <= 8) newPriorityLevel = 5;
+            else if (daysDiff <= 11) newPriorityLevel = 6;
+            else if (daysDiff <= 14) newPriorityLevel = 7;
+            else if (daysDiff <= 17) newPriorityLevel = 8;
+            else if (daysDiff <= 28) newPriorityLevel = 9;
             // Check if we need to increase the priority
-            if (priorities[task.priority] > priorities[newPriority]) {
-                task.priority = newPriority;
+            if (task.priority > newPriorityLevel) {
+                task.priority = newPriorityLevel;
                 updated = true;
             }
         }
