@@ -35,10 +35,19 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
     taskList.innerHTML = '';
     tasks.forEach((task, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${task.text} (${task.priority})`;
+        listItem.id = `task-${index}`; // Assign ID to each task's container
+
+        const taskTextSpan = document.createElement('span');
+        taskTextSpan.className = 'task-text';
+        taskTextSpan.textContent = `${task.text} (${task.priority})`;
+        listItem.appendChild(taskTextSpan);
+
+
         if (task.dueDate) {
-            listItem.textContent += ` (Due: ${task.dueDate})`;
-            listItem.dataset.dueDate = task.dueDate;
+            const dueDate = document.createElement('span');
+            dueDate.textContent = ` (Due: ${task.dueDate})`;
+            dueDate.classList.add('due-date');
+            listItem.appendChild(dueDate);
         }
         listItem.classList.add(`priority-${task.priority}`);
 
@@ -67,9 +76,17 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
         deleteButton.classList.add('task-buttons');
         deleteButton.addEventListener('click', () => deleteTask(index));
 
+        // Pencil (Edit) Button
+        const editButton = document.createElement('button');
+        editButton.innerHTML = '<i class="fa fa-pencil"></i>'; // Assuming FontAwesome is used
+        editButton.className = 'task-buttons edit-button';
+        editButton.onclick = () => editTask(index); // Function to handle task editing
+
+        listItem.appendChild(editButton);
         listItem.appendChild(increasePriorityButton);
         listItem.appendChild(decreasePriorityButton);
         listItem.appendChild(deleteButton);
+
         taskList.appendChild(listItem);
     });
     updateTaskPriorities();
@@ -84,6 +101,46 @@ const getNextPriority = (currentPriority, action) => {
     }
     return null;
 };
+
+// Function to show a date input field once the edit task button is clicked
+const editTask = (index) => {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const task = tasks[index];
+
+    //Hide old due date and edit button
+    const oldDueDate = document.querySelector(`#task-${index} .due-date`);
+    oldDueDate.style.display = 'none';
+    const editButton = document.querySelector(`#task-${index} .edit-button`);
+    editButton.style.display = 'none';
+
+    // Create a date input field
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.className = 'edit-date-input';
+    dateInput.value = task.dueDate; // Set current due date as default value
+
+    // Create a save button for the date input
+    const saveButton = document.createElement('button');
+    saveButton.innerHTML = '<i class="fa fa-save"></i>'; // Assuming FontAwesome is used
+    saveButton.className = 'save-date-btn task-buttons';
+
+    // Append the date input and save button to the task element
+    const taskElement = document.querySelector(`#task-${index}`); // Assuming each task has an id like 'task-0', 'task-1', etc.
+    taskElement.insertBefore(dateInput, taskElement.childNodes[1]); // Insert the date input before the task text
+    taskElement.insertBefore(saveButton, taskElement.childNodes[2]);
+
+    // Event listener for the save button
+    saveButton.addEventListener('click', () => {
+        const newDueDate = dateInput.value;
+        changeDueDate(index, newDueDate);
+        // Remove the date input and save button after saving
+        taskElement.removeChild(dateInput);
+        taskElement.removeChild(saveButton);
+        editButton.style.display = 'inline-block'; // Show the edit button again
+        oldDueDate.style.display = 'inline-block'; // Show the new due date
+    });
+};
+
 
 const changePriority = (index, newPriority) => {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -102,6 +159,15 @@ const deleteTask = (index) => {
 
 const comparePriority = (a, b) => {
     return a.priority - b.priority;
+};
+
+const changeDueDate = (index, newDueDate) => {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    if (index >= 0 && index < tasks.length) {
+        tasks[index].dueDate = newDueDate;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        renderTasks(tasks);
+    }
 };
 
 const updateTaskPriorities = () => {

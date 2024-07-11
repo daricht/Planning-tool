@@ -6,11 +6,7 @@
 	margin: 0 auto;
 	padding: 20px;
 }
-#taskInput {
-	width: calc(100% - 100px);
-	padding: 10px;
-	margin-bottom: 10px;
-}
+
 #addTaskButton {
 	padding: 10px 20px;
 }
@@ -21,13 +17,25 @@
 }
 
 #taskList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Align items on both ends */
     padding: 10px;
     border-bottom: 1px solid #ccc;
-    font-family: Arial, sans-serif;
 }
+
+#taskList li .task-text {
+    flex-grow: 1; /* Allow the task text to take up available space */
+}
+
 #prioritySelect {
     padding: 10px;
     margin-bottom: 10px;
+}
+
+.due-date { /* text for each task */
+    font-size: 14px;
+    color: #666;
 }
 
 .priority-10 { color: #009b00; } /* Pure Green */
@@ -42,34 +50,55 @@
 .priority-1 { color: #B22222; } /* Firebrick */
 
 .task-buttons {
-    float: right;
     margin-left: 10px;
-}
-.input-container {
     display: flex;
-    align-items: center;
-    gap: 10px; /* Adjust the gap between elements as needed */
+    gap: 5px;
 }
 
-.priority-button {
-    padding: 12px 12px; /* Add padding to make it look like a button */
-    border-radius: 7px; /* Rounded corners */
-    border: none;
-    cursor: pointer;
-    color: white; /* Text color */
-    font-size: 14px; /* Font size */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-    transition: background-color 0.3s; /* Smooth transition for background color */
+
+
+#dueDateInput {
+    width: 100px;
+    padding: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font: Arial, sans-serif;
+    font-size: 14px;
 }
 
 .priority-button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
 }
 
-#dueDateInput {
+.priority-button {
+    height:30px;
+    width:30px;
+    padding:5px;
+    margin-bottom: 10px;
+    border-radius: 9px; /* Rounded corners */
+    border: none;
+    cursor: pointer;
+    color: white; /* Text color */
+    font-size: 14px; /* Font size */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+    box-sizing: border-box; /* Include padding and border in the element's total dimensions */
+}
+
+.task-entry { /*div for task input and add button*/
+    height: 50px;
     padding: 5px;
-    border-radius: 5px;
-    width: 150px;
-    border: 1px solid #ccc;
     font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between elements as needed */
+}
+
+#taskInput{ /*text inputfor task*/
+	width: calc(100% - 280px);
+	padding: 10px;
+	margin-bottom: 10px;
 }
