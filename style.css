@@ -16,11 +16,13 @@
 }
 #taskList {
     list-style-type: none;
+    font-family: Arial, sans-serif;
     padding: 0;
 }
 #taskList li {
     padding: 10px;
     border-bottom: 1px solid #ccc;
+    font-family: Arial, sans-serif;
 }
 #prioritySelect {
     padding: 10px;
@@ -46,7 +48,7 @@
 }
 
 .priority-button {
-    padding: 7px 7px; /* Add padding to make it look like a button */
+    padding: 12px 12px; /* Add padding to make it look like a button */
     border-radius: 7px; /* Rounded corners */
     border: none;
     cursor: pointer;
@@ -58,3 +60,11 @@
 
 .priority-button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+}
+
+#dueDateInput {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}

@@ -3,6 +3,8 @@ document.getElementById('mediumPriorityButton').addEventListener('click', () => 
 document.getElementById('lowPriorityButton').addEventListener('click', () => addTask('low'));
 
 const taskInput = document.getElementById('taskInput');
+const dueDateInput = document.getElementById('dueDateInput');
+
 taskInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         addTask('medium'); // Default priority when Enter is pressed
@@ -11,10 +13,12 @@ taskInput.addEventListener('keydown', (event) => {
 
 const addTask = (priority) => {
     const taskText = taskInput.value.trim();
+    const dueDate = dueDateInput.value;
     if (taskText !== '') {
         const task = {
             text: taskText,
-            priority: priority
+            priority: priority,
+            dueDate: dueDate
         };
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.push(task);
@@ -22,15 +26,20 @@ const addTask = (priority) => {
         localStorage.setItem('tasks', JSON.stringify(tasks));
         renderTasks(tasks);
         taskInput.value = ''; // Clear the input field
+        dueDateInput.value = ''; // Clear the due date field
     }
 };
 
-const renderTasks = (tasks) => {
+const renderTasks = (tasks) => { // Render tasks to the DOM
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
     tasks.forEach((task, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = `${task.text} (${task.priority})`;
+        if (task.dueDate) {
+            listItem.textContent += ` (Due: ${task.dueDate})`;
+            listItem.dataset.dueDate = task.dueDate;
+        }
         listItem.classList.add(`priority-${task.priority}`);
 
         const increasePriorityButton = document.createElement('button');
@@ -63,6 +72,7 @@ const renderTasks = (tasks) => {
         listItem.appendChild(deleteButton);
         taskList.appendChild(listItem);
     });
+    updateTaskPriorities();
 };
 
 const getNextPriority = (currentPriority, action) => {
@@ -92,11 +102,45 @@ const deleteTask = (index) => {
 };
 
 const comparePriority = (a, b) => {
-    const priorities = ['high', 'medium', 'low'];
-    return priorities.indexOf(a.priority) - priorities.indexOf(b.priority);
+    const priorities = { 'high': 1, 'medium': 2, 'low': 3 };
+    return priorities[a.priority] - priorities[b.priority];
 };
 
-// Initial render of tasks from localStorage
+const updateTaskPriorities = () => {
+    const now = new Date();
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let updated = false;
+    tasks.forEach(task => {
+        const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+        if (dueDate) {
+            const timeDiff = dueDate - now;
+            const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+            let newPriority;
+            if (daysDiff <= 1) {
+                newPriority = 'high';
+            } else if (daysDiff <= 3) {
+                newPriority = 'medium';
+            } else {
+                newPriority = 'low';
+            }
+            if (task.priority !== newPriority) {
+                task.priority = newPriority;
+                updated = true;
+            }
+        }
+    });
+    if (updated) {
+        tasks.sort(comparePriority);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+};
+
+setInterval(() => {
+    updateTaskPriorities();
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    renderTasks(tasks);
+}, 60 * 60 * 1000); // Update priorities and render tasks every hour
+
 document.addEventListener('DOMContentLoaded', () => {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     renderTasks(tasks);
