@@ -1,6 +1,6 @@
-document.getElementById('highPriorityButton').addEventListener('click', () => addTask('high'));
-document.getElementById('mediumPriorityButton').addEventListener('click', () => addTask('medium'));
-document.getElementById('lowPriorityButton').addEventListener('click', () => addTask('low'));
+document.getElementById('highPriorityButton').addEventListener('click', () => addTask('priority-9'));
+document.getElementById('mediumPriorityButton').addEventListener('click', () => addTask('priority-5'));
+document.getElementById('lowPriorityButton').addEventListener('click', () => addTask('priority-1'));
 
 const taskInput = document.getElementById('taskInput');
 const dueDateInput = document.getElementById('dueDateInput');
@@ -40,7 +40,7 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
             listItem.textContent += ` (Due: ${task.dueDate})`;
             listItem.dataset.dueDate = task.dueDate;
         }
-        listItem.classList.add(`priority-${task.priority}`);
+        listItem.classList.add(`${task.priority}`);
 
         const increasePriorityButton = document.createElement('button');
         increasePriorityButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
@@ -76,7 +76,7 @@ const renderTasks = (tasks) => { // Render tasks to the DOM
 };
 
 const getNextPriority = (currentPriority, action) => {
-    const priorities = ['high', 'medium', 'low'];
+    const priorities = ['priority-10', 'priority-9', 'priority-8', 'priority-7', 'priority-6', 'priority-5', 'priority-4', 'priority-3', 'priority-2', 'priority-1'];
     const currentIndex = priorities.indexOf(currentPriority);
     if (action === 'increase' && currentIndex > 0) {
         return priorities[currentIndex - 1];
@@ -101,8 +101,20 @@ const deleteTask = (index) => {
     renderTasks(tasks);
 };
 
+const priorities = {
+    'priority-10': 1, // highes
+    'priority-9': 2,
+    'priority-8': 3,
+    'priority-7': 4,
+    'priority-6': 5,
+    'priority-5': 6,
+    'priority-4': 7,
+    'priority-3': 8,
+    'priority-2': 9,
+    'priority-1': 10, // lowest
+};
+
 const comparePriority = (a, b) => {
-    const priorities = { 'high': 1, 'medium': 2, 'low': 3 };
     return priorities[a.priority] - priorities[b.priority];
 };
 
@@ -114,16 +126,21 @@ const updateTaskPriorities = () => {
         const dueDate = task.dueDate ? new Date(task.dueDate) : null;
         if (dueDate) {
             const timeDiff = dueDate - now;
-            const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-            let newPriority;
-            if (daysDiff <= 1) {
-                newPriority = 'high';
-            } else if (daysDiff <= 3) {
-                newPriority = 'medium';
-            } else {
-                newPriority = 'low';
-            }
-            if (task.priority !== newPriority) {
+            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            let newPriorityLevel = 10; // Default to lowest priority
+            if (daysDiff <= 3) newPriorityLevel = 1;
+            else if (daysDiff <= 6) newPriorityLevel = 2;
+            else if (daysDiff <= 9) newPriorityLevel = 3;
+            else if (daysDiff <= 12) newPriorityLevel = 4;
+            else if (daysDiff <= 15) newPriorityLevel = 5;
+            else if (daysDiff <= 18) newPriorityLevel = 6;
+            else if (daysDiff <= 21) newPriorityLevel = 7;
+            else if (daysDiff <= 24) newPriorityLevel = 8;
+            else if (daysDiff <= 27) newPriorityLevel = 9;
+            // Convert to priority string
+            const newPriority = `priority-${newPriorityLevel}`;
+            // Check if we need to increase the priority
+            if (priorities[task.priority] > priorities[newPriority]) {
                 task.priority = newPriority;
                 updated = true;
             }

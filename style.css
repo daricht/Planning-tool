@@ -19,6 +19,7 @@
     font-family: Arial, sans-serif;
     padding: 0;
 }
+
 #taskList li {
     padding: 10px;
     border-bottom: 1px solid #ccc;
@@ -28,15 +29,18 @@
     padding: 10px;
     margin-bottom: 10px;
 }
-.priority-low {
-    color: green;
-}
-.priority-medium {
-    color: orange;
-}
-.priority-high {
-    color: red;
-}
+
+.priority-1 { color: #009b00; } /* Pure Green */
+.priority-2 { color: #2dbd2d; } /* Lime Green */
+.priority-3 { color: #81bf23; } /* Green Yellow */
+.priority-4 { color: #c7c700; } /* Yellow */
+.priority-5 { color: #FFD700; } /* Gold */
+.priority-6 { color: #FFA500; } /* Orange */
+.priority-7 { color: #FF8C00; } /* Dark Orange */
+.priority-8 { color: #FF4500; } /* Orange Red */
+.priority-9 { color: #FF0000; } /* Red */
+.priority-10 { color: #B22222; } /* Firebrick */
+
 .task-buttons {
     float: right;
     margin-left: 10px;
@@ -65,6 +69,7 @@
 #dueDateInput {
     padding: 5px;
     border-radius: 5px;
+    width: 150px;
     border: 1px solid #ccc;
     font-size: 14px;
 }
